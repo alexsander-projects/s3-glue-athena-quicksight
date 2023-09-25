@@ -4,7 +4,7 @@
 
 ### Steps for Glue and Athena
 
- ![]()
+ ![](https://github.com/myProjects175/s3-glue-athena-quicksight/blob/4998c28a684313bb12d447a12758c16edb711b4a/sourceimages/dataflow.png)
  >dataflow
 
 - First create a S3 bucket and upload the csv file containing the data;
@@ -43,7 +43,7 @@
 
 - Create a AWS glue Database;
 
-![]()
+![](https://github.com/myProjects175/s3-glue-athena-quicksight/blob/4998c28a684313bb12d447a12758c16edb711b4a/sourceimages/database.png)
 
 - Create a Glue Crawler:
 
@@ -52,7 +52,7 @@
     - Set the IAM role that you created earlier;
     - Set output as the database you created.
 
-![]()
+![](https://github.com/myProjects175/s3-glue-athena-quicksight/blob/4998c28a684313bb12d447a12758c16edb711b4a/sourceimages/crawler.png)
 
 - Now, run the crawler, it will automatically create a table with the schemas;
 
@@ -70,15 +70,15 @@ SELECT
   "time.month",
   "statistics.minutes delayed.weather",
   "airport.code"
-FROM airlines85263014.airline;
+FROM YOUR_DATABASE.YOUR_TABLE;
 ```
 
-![]()
+![](https://github.com/myProjects175/s3-glue-athena-quicksight/blob/4998c28a684313bb12d447a12758c16edb711b4a/sourceimages/query.png)
 >output
 
 ### Steps for Quicksight
 
- ![]()
+ ![](https://github.com/myProjects175/s3-glue-athena-quicksight/blob/4998c28a684313bb12d447a12758c16edb711b4a/sourceimages/dataflow2.png)
  >dataflow
 
 - Launch AWS Quicksight and create a New Analysis;
@@ -87,4 +87,4 @@ FROM airlines85263014.airline;
 
 - With the analysis created, select the fields on the left and quicksight will show a graph with the data:
 
-![]()
+![](https://github.com/myProjects175/s3-glue-athena-quicksight/blob/4998c28a684313bb12d447a12758c16edb711b4a/sourceimages/quicksight.png)
