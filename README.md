@@ -2,7 +2,7 @@
 
  Here we will run ETL jobs with AWS Glue with AWS S3 as source, quering with Athena and visualizing with Amazon Quicksight
 
-### Steps for Glue and Athena
+## Steps for Glue and Athena
 
  ![](https://github.com/myProjects175/s3-glue-athena-quicksight/blob/4998c28a684313bb12d447a12758c16edb711b4a/sourceimages/dataflow.png)
  >dataflow
@@ -76,7 +76,7 @@ FROM YOUR_DATABASE.YOUR_TABLE;
 ![](https://github.com/myProjects175/s3-glue-athena-quicksight/blob/4998c28a684313bb12d447a12758c16edb711b4a/sourceimages/query.png)
 >output
 
-### Steps for Quicksight
+## Steps for Quicksight
 
  ![](https://github.com/myProjects175/s3-glue-athena-quicksight/blob/4998c28a684313bb12d447a12758c16edb711b4a/sourceimages/dataflow2.png)
  >dataflow
