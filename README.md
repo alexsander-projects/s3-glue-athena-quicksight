@@ -1,15 +1,21 @@
 # Introduction
 
- Here we will run ETL jobs with AWS Glue with AWS S3 as source, quering with Athena and visualizing with Amazon Quicksight
+Here we will run ETL jobs with AWS Glue with AWS S3 as source, quering with Athena and visualizing with Amazon Quicksight
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Steps for Glue and Athena](#steps-for-glue-and-athena)
+- [Steps for Quicksight](#steps-for-quicksight)
 
 ## Steps for Glue and Athena
 
- ![](https://github.com/myProjects175/s3-glue-athena-quicksight/blob/4998c28a684313bb12d447a12758c16edb711b4a/sourceimages/dataflow.png)
- >dataflow
+![](sourceimages/dataflow.png)
+>dataflow
 
-- First create a S3 bucket and upload the csv file containing the data;
+- First create a S3 bucket and upload the `airlines.csv` file containing the data.
 
-- Create an IAM role with the following policy:
+- Create an IAM role with the following policy (replace `your-bucket-name` with your actual S3 bucket name):
 
 ```yaml
 {
@@ -36,55 +42,77 @@
             "Effect": "Allow",
             "Action": "s3:ListAllMyBuckets",
             "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "glue:GetDatabase",
+                "glue:GetDatabases",
+                "glue:CreateTable",
+                "glue:UpdateTable",
+                "glue:GetTable",
+                "glue:GetTables",
+                "glue:GetPartition",
+                "glue:GetPartitions",
+                "glue:CreatePartition",
+                "glue:BatchCreatePartition",
+                "glue:GetUserDefinedFunctions"
+            ],
+            "Resource": "*"
         }
     ]
 }
 ```
 
-- Create a AWS glue Database;
+- Create an AWS Glue Database.
 
-![](https://github.com/myProjects175/s3-glue-athena-quicksight/blob/4998c28a684313bb12d447a12758c16edb711b4a/sourceimages/database.png)
+![](sourceimages/database.png)
 
 - Create a Glue Crawler:
 
-    - Set a unique name;
-    - Set the data source as the `path to the csv file`;
-    - Set the IAM role that you created earlier;
+    - Set a unique name.
+    - Set the data source as the S3 path to the folder containing the `airlines.csv` file (e.g., `s3://your-bucket-name/path/to/folder/`).
+    - Set the IAM role that you created earlier.
     - Set output as the database you created.
 
-![](https://github.com/myProjects175/s3-glue-athena-quicksight/blob/4998c28a684313bb12d447a12758c16edb711b4a/sourceimages/crawler.png)
+![](sourceimages/crawler.png)
 
-- Now, run the crawler, it will automatically create a table with the schemas;
+- Now, run the crawler. It will automatically create a table with the schemas.
 
-- You need to edit the schemas for our queries to work, either do it manually or edit the schemas as JSON;
->Set all data types as `string`
+- You may need to edit the schemas for your queries to work. A common practice is to ensure data types are appropriate (e.g., strings, numbers, dates). For this specific dataset, initially setting all data types to `string` can be a safe starting point, and you can refine them later.
+> Example: Set all data types as `string`.
 
-- Now head into Athena and start the query editor;
+- Now head into Athena and start the query editor.
 
-- Select the data catalog and database;
+- Select the data catalog and database you created.
 
-- We will run the following query to get some data:
+- We will run the following query to get some data (replace `YOUR_DATABASE` and `YOUR_TABLE` with your actual Glue database and table names):
 
 ```sql
 SELECT
   "time.month",
   "statistics.minutes delayed.weather",
   "airport.code"
-FROM YOUR_DATABASE.YOUR_TABLE;
+FROM YOUR_DATABASE.YOUR_TABLE
+LIMIT 10;
 ```
 
-![](https://github.com/myProjects175/s3-glue-athena-quicksight/blob/4998c28a684313bb12d447a12758c16edb711b4a/sourceimages/query.png)
+![](sourceimages/query.png)
 >output
 
 ## Steps for Quicksight
 
- ![](https://github.com/myProjects175/s3-glue-athena-quicksight/blob/4998c28a684313bb12d447a12758c16edb711b4a/sourceimages/dataflow2.png)
- >dataflow
+![](sourceimages/dataflow2.png)
+>dataflow
 
-- Launch AWS Quicksight and create a New Analysis;
+- Launch AWS Quicksight.
+- Create a New Analysis.
+- Select "New Dataset".
+- Choose Athena as the data source.
+    - Give your data source a name (e.g., "AthenaAirlinesData").
+    - Select the Glue Catalog, Database, and Table that you created earlier.
+- Click "Edit/Preview data" or "Visualize".
+- With the analysis created, select the fields on the left, and Quicksight will show a graph with the data.
 
-- Select New Dataset and upload your csv file;
+![](sourceimages/quicksight.png)
 
-- With the analysis created, select the fields on the left and quicksight will show a graph with the data:
-
-![](https://github.com/myProjects175/s3-glue-athena-quicksight/blob/4998c28a684313bb12d447a12758c16edb711b4a/sourceimages/quicksight.png)
