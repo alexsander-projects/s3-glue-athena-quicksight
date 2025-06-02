@@ -2,7 +2,7 @@ resource "aws_s3_bucket" "data_bucket" {
   bucket = var.s3_bucket_name
 }
 
-resource "aws_s3_bucket_object" "airlines_data" {
+resource "aws_s3_object" "airlines_data" {
   bucket = aws_s3_bucket.data_bucket.id
   key    = "airlines.csv"
   source = "airlines.csv" # Assumes airlines.csv is in the same directory as Terraform files
@@ -109,7 +109,7 @@ EOF
 
   depends_on = [
     aws_iam_role_policy.glue_s3_access,
-    aws_s3_bucket_object.airlines_data
+    aws_s3_object.airlines_data
   ]
 }
 
