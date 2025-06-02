@@ -5,6 +5,7 @@ Here we will run ETL jobs with AWS Glue with AWS S3 as source, quering with Athe
 ## Table of Contents
 
 - [Introduction](#introduction)
+- [Terraform Automation](#terraform-automation)
 - [Steps for Glue and Athena](#steps-for-glue-and-athena)
 - [Steps for Quicksight](#steps-for-quicksight)
 
@@ -116,3 +117,54 @@ LIMIT 10;
 
 ![](sourceimages/quicksight.png)
 
+## Terraform Automation
+
+This project includes Terraform files to automate the creation of the necessary AWS resources.
+
+### Prerequisites
+
+- [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) installed on your local machine.
+- AWS credentials configured for Terraform. You can do this by setting up environment variables (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and optionally `AWS_SESSION_TOKEN`) or by using an AWS credentials file.
+- The `airlines.csv` file in the root of this project directory.
+
+### Setup Instructions
+
+1.  **Initialize Terraform:**
+    Open your terminal, navigate to the project directory (`F:\alexs\IdeaProjects`), and run:
+    ```bash
+    terraform init
+    ```
+
+2.  **Create a `terraform.tfvars` file:**
+    In the project root (`F:\alexs\IdeaProjects`), create a file named `terraform.tfvars` with the following content. Replace `your-unique-s3-bucket-name` with a globally unique name for your S3 bucket and adjust the `aws_region` if needed.
+    ```terraform
+    s3_bucket_name = "your-unique-s3-bucket-name"
+    aws_region     = "us-west-2" // Or your preferred AWS region
+    ```
+    *Note: The default region in `variables.tf` is `us-west-2`. If you change it in `terraform.tfvars`, ensure it's a region where all required services (S3, Glue, Athena, Quicksight) are available.*
+
+3.  **Plan the deployment:**
+    Run the following command to see what resources Terraform will create:
+    ```bash
+    terraform plan
+    ```
+
+4.  **Apply the configuration:**
+    If the plan looks good, apply the configuration to create the AWS resources:
+    ```bash
+    terraform apply
+    ```
+    Type `yes` when prompted to confirm.
+
+5.  **After Deployment:**
+    Once Terraform completes, the S3 bucket, Glue database, and Glue crawler will be created. The `airlines.csv` file will be uploaded to the S3 bucket, and the Glue crawler will be started automatically (due to `depends_on` in `main.tf` ensuring the data is present before the crawler attempts to run). You might need to manually run the crawler from the AWS console if it doesn't pick up the schema correctly on the first try or if you want to re-crawl after changes.
+
+    You can then proceed with the [Steps for Glue and Athena](#steps-for-glue-and-athena) (mainly for querying in Athena, as the database and table will be created by Terraform/Glue) and [Steps for Quicksight](#steps-for-quicksight).
+
+### Cleaning Up
+
+To remove the resources created by Terraform, run:
+```bash
+terraform destroy
+```
+Type `yes` when prompted to confirm.

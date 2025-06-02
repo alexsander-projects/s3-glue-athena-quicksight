@@ -1,2 +1,2 @@
-s3_bucket_name = "your-unique-s3-bucket-name"
-aws_region     = "us-east-1" // Or your preferred region
+s3_bucket_name = "test-airlines-data-bucket" // Replace with your S3 bucket name
+aws_region     = "us-west-2" // Or your preferred region
